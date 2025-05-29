@@ -38,19 +38,21 @@ function App() {
     passwordGen()
   }, [length, numAllow, charAllow, passwordGen])
   return (
-   <div className="min-h-screen w-full bg-black flex items-center justify-center relative overflow-hidden">
+   <div className="min-h-screen w-full bg-black flex items-center justify-center relative overflow-hidden px-4 sm:px-6 md:px-8">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(50)].map((_, index) => (
+        {[...Array(20)].map((_, index) => (
           <div
             key={index}
-            className="absolute text-blue-400/40 text-2xl font-bold animate-float"
+            className="absolute text-blue-400/40 text-lg sm:text-xl md:text-2xl font-bold animate-float will-change-transform"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 10}s`,
-              textShadow: '0 0 10px rgba(59, 130, 246, 0.5)'
+              animationDuration: `${8 + Math.random() * 12}s`,
+              textShadow: '0 0 10px rgba(59, 130, 246, 0.5)',
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden'
             }}
           >
             {String.fromCharCode(
@@ -64,24 +66,24 @@ function App() {
         ))}
       </div>
 
-      <div className="w-full max-w-md mx-auto shadow-2xl rounded-xl px-6 py-8 my-12 bg-gradient-to-br from-gray-800/90 to-gray-900/90 text-center relative z-10 backdrop-blur-md">
-        <h1 className="text-3xl font-bold text-white text-center mb-6 tracking-wide">Password Generator</h1>
-        <div className="flex shadow-lg rounded-lg overflow-hidden mb-6 bg-white/10 backdrop-blur-sm">
+      <div className="w-full max-w-md mx-auto shadow-2xl rounded-xl px-4 sm:px-6 py-6 sm:py-8 my-4 sm:my-8 md:my-12 bg-gradient-to-br from-gray-800/90 to-gray-900/90 text-center relative z-10 backdrop-blur-md">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white text-center mb-4 sm:mb-6 tracking-wide">Password Generator</h1>
+        <div className="flex shadow-lg rounded-lg overflow-hidden mb-4 sm:mb-6 bg-white/10 backdrop-blur-sm">
           <input 
           type="text" 
           value={password}
-          className="outline-none w-full py-3 px-4 bg-transparent text-white placeholder-gray-400"
+          className="outline-none w-full py-2 sm:py-3 px-3 sm:px-4 bg-transparent text-white placeholder-gray-400 text-sm sm:text-base"
           placeholder="Password"
           readOnly 
           ref={passwordRef}
           />
 
           <button 
-          className="outline-none bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 shrink-0 transition-all duration-200 font-medium"
+          className="outline-none bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 shrink-0 transition-all duration-200 font-medium text-sm sm:text-base"
           onClick={copytoclipboard}
           >Copy</button>
         </div>
-        <div className="flex flex-col gap-y-4 text-sm">
+        <div className="flex flex-col gap-y-3 sm:gap-y-4 text-xs sm:text-sm">
           <div className="flex items-center gap-x-2">
             <input 
             type="range" 
@@ -91,15 +93,15 @@ function App() {
             className="cursor-pointer w-full accent-blue-500"
             onChange={(e) => {setLength(e.target.value)}}
             />
-            <label className="text-blue-400 font-medium min-w-[100px]">Length: {length}</label>
+            <label className="text-blue-400 font-medium min-w-[80px] sm:min-w-[100px]">Length: {length}</label>
           </div>
-          <div className="flex items-center justify-center gap-x-6">
+          <div className="flex items-center justify-center gap-x-4 sm:gap-x-6">
             <div className="flex items-center gap-x-2">
               <input 
               type="checkbox"
               defaultChecked={numAllow}
               id="numberInput"
-              className="w-4 h-4 accent-blue-500"
+              className="w-3 h-3 sm:w-4 sm:h-4 accent-blue-500"
               onChange={() => {
                 setNumAllow((prev) => !prev);
               }} 
@@ -111,7 +113,7 @@ function App() {
               type="checkbox"
               defaultChecked={charAllow}
               id="charInput"
-              className="w-4 h-4 accent-blue-500"
+              className="w-3 h-3 sm:w-4 sm:h-4 accent-blue-500"
               onChange={() => {
                 setNumAllow((prev) => !prev);
               }} 
@@ -132,7 +134,7 @@ const style = document.createElement('style');
 style.textContent = `
   @keyframes float {
     0% {
-      transform: translateY(0) rotate(0deg);
+      transform: translate3d(0, 0, 0) rotate(0deg);
       opacity: 0;
     }
     10% {
@@ -142,12 +144,19 @@ style.textContent = `
       opacity: 0.7;
     }
     100% {
-      transform: translateY(-100vh) rotate(360deg);
+      transform: translate3d(0, -100vh, 0) rotate(360deg);
       opacity: 0;
     }
   }
   .animate-float {
     animation: float linear infinite;
+    will-change: transform, opacity;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float {
+      animation: none;
+      opacity: 0.3;
+    }
   }
 `;
 document.head.appendChild(style);
